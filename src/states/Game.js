@@ -23,7 +23,15 @@ export default class extends Phaser.State {
       asset: 'mushroom'
     })
 
+    this.mushroom2 = new Mushroom({
+      game: this,
+      x: this.world.centerX + 100,
+      y: this.world.centerY + 20,
+      asset: 'mushroom'
+    })
+
     this.game.add.existing(this.mushroom)
+    this.game.add.existing(this.mushroom2)
   }
 
   render () {
