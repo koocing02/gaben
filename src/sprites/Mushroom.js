@@ -15,5 +15,6 @@ export default class extends Phaser.Sprite {
     this.x = (scaleFactor * Math.cos(this.circleBasis)) + this.centerX
     this.y = (scaleFactor * Math.sin(this.circleBasis)) + this.centerY
     this.angle += 10
+    //adding comment to merge with Carson
   }
 }
