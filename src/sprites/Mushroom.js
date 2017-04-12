@@ -10,8 +10,8 @@ export default class extends Phaser.Sprite {
   }
 
   update () {
-    this.circleBasis += 0.05
-    const scaleFactor = 5
+    this.circleBasis += 0.065
+    const scaleFactor = 4
     this.x = (scaleFactor * Math.cos(this.circleBasis)) + this.centerX
     this.y = (scaleFactor * Math.sin(this.circleBasis)) + this.centerY
     this.angle += 10

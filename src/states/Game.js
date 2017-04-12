@@ -29,7 +29,7 @@ export default class extends Phaser.State {
       y: this.world.centerY + 20,
       asset: 'mushroom'
     })
-
+    // this is a comment
     this.game.add.existing(this.mushroom)
     this.game.add.existing(this.mushroom2)
   }
