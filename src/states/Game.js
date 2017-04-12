@@ -1,6 +1,7 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
+import AnimePotato from '../sprites/AnimePotato'
 
 export default class extends Phaser.State {
   init () {}
@@ -23,15 +24,22 @@ export default class extends Phaser.State {
       asset: 'mushroom'
     })
 
-    this.mushroom2 = new Mushroom({
+    this.aPotato = new AnimePotato({
       game: this,
       x: this.world.centerX + 100,
       y: this.world.centerY + 20,
-      asset: 'mushroom'
+      asset: 'a-potato'
     })
     // this is a comment
+    this.game.physics.enable(this.aPotato, Phaser.Physics.ARCADE)
+    this.game.physics.enable(this.mushroom, Phaser.Physics.ARCADE)
     this.game.add.existing(this.mushroom)
-    this.game.add.existing(this.mushroom2)
+    this.game.add.existing(this.aPotato)
+  }
+
+  update () {
+    console.log('tick!')
+    this.game.physics.arcade.collide(this.aPotato, this.mushroom)
   }
 
   render () {
