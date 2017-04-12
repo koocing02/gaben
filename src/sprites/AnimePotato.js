@@ -10,6 +10,7 @@ export default class AnimePotato extends Phaser.Sprite {
     this.centerY = y
     this.anchor.setTo(0.5)
     this.circleBasis = 0
+    // comment
   }
 
   update () {
