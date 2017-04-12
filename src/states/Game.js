@@ -56,7 +56,9 @@ export default class extends Phaser.State {
   }
 
   update () {
-    this.game.physics.arcade.collide(this.aPotato, this.mushroom)
+    this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
+      console.log(sprite1,sprite2)
+    })
   }
 
   render () {
