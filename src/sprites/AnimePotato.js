@@ -12,6 +12,10 @@ export default class AnimePotato extends Phaser.Sprite {
     this.circleBasis = 0
   }
 
+  wiggle () {
+
+  }
+
   update () {
   }
 }
