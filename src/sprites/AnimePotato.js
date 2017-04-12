@@ -13,6 +13,10 @@ export default class AnimePotato extends Phaser.Sprite {
     // comment
   }
 
+  wiggle () {
+
+  }
+
   update () {
   }
 }

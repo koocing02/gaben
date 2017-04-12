@@ -5,6 +5,7 @@ import AnimePotato from '../sprites/AnimePotato'
 
 export default class extends Phaser.State {
   init () {}
+
   preload () {}
 
   create () {
@@ -16,6 +17,8 @@ export default class extends Phaser.State {
     banner.fill = '#77BFA3'
     banner.smoothed = false
     banner.anchor.setTo(0.5)
+
+    this.explosion = this.game.add.audio('explosion')
 
     this.mushroom = new Mushroom({
       game: this,
@@ -30,15 +33,29 @@ export default class extends Phaser.State {
       y: this.world.centerY + 20,
       asset: 'a-potato'
     })
-    // this is a comment
-    this.game.physics.enable(this.aPotato, Phaser.Physics.ARCADE)
-    this.game.physics.enable(this.mushroom, Phaser.Physics.ARCADE)
+
     this.game.add.existing(this.mushroom)
     this.game.add.existing(this.aPotato)
+
+    this.game.physics.startSystem(Phaser.Physics.ARCADE)
+    this.game.physics.enable([this.aPotato, this.mushroom])
+
+    this.aPotato.body.onCollide = new Phaser.Signal()
+    this.aPotato.body.onCollide.add((sprite1,sprite2) => {
+      this.explosion.play()
+    })
+
+    // face1.body.velocity.setTo(200, 200);
+    // face1.body.bounce.set(1);
+    //
+    // face2.body.velocity.setTo(-200, 200);
+    // face2.body.bounce.set(1);
+    //
+    // face1.body.collideWorldBounds = true;
+    // face2.body.collideWorldBounds = true;
   }
 
   update () {
-    console.log('tick!')
     this.game.physics.arcade.collide(this.aPotato, this.mushroom)
   }
 
