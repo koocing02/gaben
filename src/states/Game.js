@@ -98,7 +98,8 @@ export default class extends Phaser.State {
     }
 
     if (!isWalking) {
-      this.aPotato.animations.play('cycle', 0)
+      // this.aPotato.animations.play('cycle', 0)
+      this.aPotato.frame = 0
       this.aPotato.animations.stop()
     }
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
