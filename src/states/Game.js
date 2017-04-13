@@ -48,6 +48,7 @@ export default class extends Phaser.State {
       this.aPotato.animations.play('cycle')
     })
 
+    this.cursors = this.game.input.keyboard.createCursorKeys()
     // face1.body.velocity.setTo(200, 200);
     // face1.body.bounce.set(1);
     //
@@ -59,6 +60,21 @@ export default class extends Phaser.State {
   }
 
   update () {
+    const {aPotato} = this
+    const speed = 3
+    const {up, down, left, right} = this.cursors
+    if (down.isDown) {
+      aPotato.y += speed
+    }
+    if (up.isDown) {
+      aPotato.y -= speed
+    }
+    if (left.isDown) {
+      aPotato.x -= speed
+    }
+    if (right.isDown) {
+      aPotato.x += speed
+    }
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
       console.log(sprite1, sprite2)
     })
