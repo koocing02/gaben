@@ -4,7 +4,9 @@ import Mushroom from '../sprites/Mushroom'
 import AnimePotato from '../sprites/AnimePotato'
 
 export default class extends Phaser.State {
-  init () {}
+  // do not know why I needed to add these manually for animation support...
+  init () {
+  }
 
   preload () {}
 
@@ -21,14 +23,14 @@ export default class extends Phaser.State {
     this.explosion = this.game.add.audio('explosion')
 
     this.mushroom = new Mushroom({
-      game: this,
+      game: this.game,
       x: this.world.centerX,
       y: this.world.centerY,
       asset: 'mushroom'
     })
 
     this.aPotato = new AnimePotato({
-      game: this,
+      game: this.game,
       x: this.world.centerX + 100,
       y: this.world.centerY + 20,
       asset: 'a-potato'
@@ -40,9 +42,10 @@ export default class extends Phaser.State {
     this.game.physics.startSystem(Phaser.Physics.ARCADE)
     this.game.physics.enable([this.aPotato, this.mushroom])
 
+    this.aPotato.animations.add('cycle', [1, 2, 3], 2)
     this.aPotato.body.onCollide = new Phaser.Signal()
-    this.aPotato.body.onCollide.add((sprite1,sprite2) => {
-      this.explosion.play()
+    this.aPotato.body.onCollide.add((sprite1, sprite2) => {
+      this.aPotato.animations.play('cycle')
     })
 
     // face1.body.velocity.setTo(200, 200);
@@ -57,7 +60,7 @@ export default class extends Phaser.State {
 
   update () {
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
-      console.log(sprite1,sprite2)
+      console.log(sprite1, sprite2)
     })
   }
 
