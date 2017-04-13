@@ -42,7 +42,7 @@ export default class extends Phaser.State {
     this.game.physics.startSystem(Phaser.Physics.ARCADE)
     this.game.physics.enable([this.aPotato, this.mushroom])
 
-    this.aPotato.animations.add('cycle', [1, 2, 3], 2)
+    this.aPotato.animations.add('cycle')
     this.aPotato.body.onCollide = new Phaser.Signal()
     this.aPotato.body.onCollide.add((sprite1, sprite2) => {
       this.aPotato.animations.play('cycle')
