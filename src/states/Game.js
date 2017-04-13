@@ -4,6 +4,7 @@ import Mushroom from '../sprites/Mushroom'
 import AnimePotato from '../sprites/AnimePotato'
 
 const playerScale = 1
+let speed = 1.5
 
 export default class extends Phaser.State {
   // do not know why I needed to add these manually for animation support...
@@ -71,7 +72,7 @@ export default class extends Phaser.State {
 
   update () {
     const {aPotato} = this
-    const speed = 1.5
+
     const {up, down, left, right} = this.cursors
     let isWalking = false
     if (down.isDown) {
@@ -97,7 +98,8 @@ export default class extends Phaser.State {
     }
 
     if (!isWalking) {
-      this.aPotato.asset = 'a-potato'
+      this.aPotato.animations.play('cycle', 0)
+      this.aPotato.animations.stop()
     }
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
       // console.log(sprite1, sprite2)
