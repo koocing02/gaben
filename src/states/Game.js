@@ -3,6 +3,8 @@ import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 import AnimePotato from '../sprites/AnimePotato'
 
+const playerScale = 3
+
 export default class extends Phaser.State {
   // do not know why I needed to add these manually for animation support...
   init () {
@@ -33,7 +35,11 @@ export default class extends Phaser.State {
       game: this.game,
       x: this.world.centerX + 100,
       y: this.world.centerY + 20,
-      asset: 'a-potato'
+      asset: 'a-potato',
+      // scale : {
+      //   x: playerScale,
+      //   y: playerScale
+      // }
     })
 
     this.game.add.existing(this.mushroom)
@@ -43,9 +49,13 @@ export default class extends Phaser.State {
     this.game.physics.enable([this.aPotato, this.mushroom])
 
     this.aPotato.animations.add('cycle')
+    this.aPotato.scale = {
+      x: playerScale,
+      y: playerScale
+    }
     this.aPotato.body.onCollide = new Phaser.Signal()
     this.aPotato.body.onCollide.add((sprite1, sprite2) => {
-      this.aPotato.animations.play('cycle')
+      // this.aPotato.animations.play('cycle', 10)
     })
 
     this.cursors = this.game.input.keyboard.createCursorKeys()
@@ -63,20 +73,30 @@ export default class extends Phaser.State {
     const {aPotato} = this
     const speed = 3
     const {up, down, left, right} = this.cursors
+    let isWalking = false
     if (down.isDown) {
       aPotato.y += speed
+      isWalking = true
     }
     if (up.isDown) {
       aPotato.y -= speed
+      isWalking = true
     }
     if (left.isDown) {
       aPotato.x -= speed
+      aPotato.scale.x = -playerScale
+      isWalking = true
     }
     if (right.isDown) {
       aPotato.x += speed
+      aPotato.scale.x = playerScale
+      isWalking = true
+    }
+    if (isWalking) {
+      this.aPotato.animations.play('cycle', 10)
     }
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
-      console.log(sprite1, sprite2)
+      // console.log(sprite1, sprite2)
     })
   }
 
