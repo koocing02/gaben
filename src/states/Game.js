@@ -102,10 +102,6 @@ export default class extends Phaser.State {
     }
 
     if (!isWalking) {
-<<<<<<< HEAD
-      // this.aPotato.animations.play('cycle', 0)
-=======
->>>>>>> experimental
       this.aPotato.frame = 0
       this.aPotato.animations.stop()
       if (this.movingRight > 0) {
