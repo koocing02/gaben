@@ -1,9 +1,16 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
+import AnimePotato from '../sprites/AnimePotato'
+
+const playerScale = 1
+let speed = 2
 
 export default class extends Phaser.State {
-  init () {}
+  // do not know why I needed to add these manually for animation support...
+  init () {
+  }
+
   preload () {}
 
   create () {
@@ -16,22 +23,97 @@ export default class extends Phaser.State {
     banner.smoothed = false
     banner.anchor.setTo(0.5)
 
+    this.explosion = this.game.add.audio('explosion')
+
     this.mushroom = new Mushroom({
-      game: this,
+      game: this.game,
       x: this.world.centerX,
       y: this.world.centerY,
       asset: 'mushroom'
     })
 
-    this.mushroom2 = new Mushroom({
-      game: this,
-      x: this.world.centerX + 100,
-      y: this.world.centerY + 20,
-      asset: 'mushroom'
+    this.aPotato = new AnimePotato({
+      game: this.game,
+      x: this.world.centerX,
+      y: this.world.centerY,
+      asset: 'a-potato'
+      // scale : {
+      //   x: playerScale,
+      //   y: playerScale
+      // }
     })
 
     this.game.add.existing(this.mushroom)
-    this.game.add.existing(this.mushroom2)
+    this.game.add.existing(this.aPotato)
+
+    this.game.physics.startSystem(Phaser.Physics.ARCADE)
+    this.game.physics.enable([this.aPotato, this.mushroom])
+
+    this.aPotato.animations.add('cycle')
+    this.aPotato.scale = {
+      x: playerScale,
+      y: playerScale
+    }
+    this.aPotato.body.onCollide = new Phaser.Signal()
+    this.aPotato.body.onCollide.add((sprite1, sprite2) => {
+      // this.aPotato.animations.play('cycle', 10)
+    })
+
+    this.cursors = this.game.input.keyboard.createCursorKeys()
+    // face1.body.velocity.setTo(200, 200);
+    // face1.body.bounce.set(1);
+    //
+    // face2.body.velocity.setTo(-200, 200);
+    // face2.body.bounce.set(1);
+    //
+    // face1.body.collideWorldBounds = true;
+    // face2.body.collideWorldBounds = true;
+  }
+
+  update () {
+    const {aPotato} = this
+
+    const {up, down, left, right} = this.cursors
+    let isWalking = false
+    if (down.isDown) {
+      aPotato.y += speed
+      isWalking = true
+    }
+    if (up.isDown) {
+      aPotato.y -= speed
+      isWalking = true
+    }
+    if (left.isDown) {
+      aPotato.x -= speed
+      this.movingLeft = 5
+      aPotato.scale.x = -playerScale
+      isWalking = true
+    }
+    if (right.isDown) {
+      aPotato.x += speed
+      this.movingRight = 5
+      aPotato.scale.x = playerScale
+      isWalking = true
+    }
+    if (isWalking) {
+      this.aPotato.animations.play('cycle', 4)
+    }
+
+    if (!isWalking) {
+      this.aPotato.animations.play('cycle', 0)
+      this.aPotato.animations.stop()
+      if (this.movingRight > 0) {
+          this.movingRight -= 0.1
+          aPotato.x += this.movingRight ^ 0.001
+      }
+      if (this.movingLeft > 0) {
+        this.movingLeft -= 0.1
+        aPotato.x -= this.movingLeft ^ 0.001
+      }
+    }
+    this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
+      // console.log(sprite1, sprite2)
+    })
   }
 
   render () {
