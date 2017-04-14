@@ -77,21 +77,23 @@ export default class extends Phaser.State {
     let isWalking = false
     if (down.isDown) {
       aPotato.y += speed
+      this.movingDown = 3
       isWalking = true
     }
     if (up.isDown) {
       aPotato.y -= speed
+      this.movingUp = 3
       isWalking = true
     }
     if (left.isDown) {
       aPotato.x -= speed
-      this.movingLeft = 5
+      this.movingLeft = 3
       aPotato.scale.x = -playerScale
       isWalking = true
     }
     if (right.isDown) {
       aPotato.x += speed
-      this.movingRight = 5
+      this.movingRight = 3
       aPotato.scale.x = playerScale
       isWalking = true
     }
@@ -103,12 +105,20 @@ export default class extends Phaser.State {
       this.aPotato.animations.play('cycle', 0)
       this.aPotato.animations.stop()
       if (this.movingRight > 0) {
-          this.movingRight -= 0.1
-          aPotato.x += this.movingRight ^ 0.001
+        this.movingRight -= 0.1
+        aPotato.x += 0.5 ^ this.movingRight
       }
       if (this.movingLeft > 0) {
         this.movingLeft -= 0.1
-        aPotato.x -= this.movingLeft ^ 0.001
+        aPotato.x -= 0.5 ^ this.movingLeft
+      }
+      if (this.movingUp > 0) {
+        this.movingUp -= 0.1
+        aPotato.y -= 0.5 ^ this.movingUp
+      }
+      if (this.movingDown > 0) {
+        this.movingDown -= 0.1
+        aPotato.y += 0.5 ^ this.movingDown
       }
     }
     this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
