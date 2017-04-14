@@ -98,7 +98,7 @@ export default class extends Phaser.State {
       isWalking = true
     }
     if (isWalking) {
-      this.aPotato.animations.play('cycle', 4)
+      this.aPotato.animations.play('cycle', 8)
     }
 
     if (!isWalking) {
