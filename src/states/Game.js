@@ -5,6 +5,7 @@ import AnimePotato from '../sprites/AnimePotato'
 
 const playerScale = 1
 let speed = 2
+const walkVelocity = 150
 
 export default class extends Phaser.State {
   // do not know why I needed to add these manually for animation support...
@@ -32,7 +33,7 @@ export default class extends Phaser.State {
       asset: 'mushroom'
     })
 
-    this.aPotato = new AnimePotato({
+    this.player = new AnimePotato({
       game: this.game,
       x: this.world.centerX,
       y: this.world.centerY,
@@ -44,19 +45,19 @@ export default class extends Phaser.State {
     })
 
     this.game.add.existing(this.mushroom)
-    this.game.add.existing(this.aPotato)
+    this.game.add.existing(this.player)
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE)
-    this.game.physics.enable([this.aPotato, this.mushroom])
+    this.game.physics.enable([this.player, this.mushroom])
 
-    this.aPotato.animations.add('cycle')
-    this.aPotato.scale = {
+    this.player.animations.add('cycle')
+    this.player.scale = {
       x: playerScale,
       y: playerScale
     }
-    this.aPotato.body.onCollide = new Phaser.Signal()
-    this.aPotato.body.onCollide.add((sprite1, sprite2) => {
-      // this.aPotato.animations.play('cycle', 10)
+    this.player.body.onCollide = new Phaser.Signal()
+    this.player.body.onCollide.add((sprite1, sprite2) => {
+      // this.player.animations.play('cycle', 10)
     })
 
     this.cursors = this.game.input.keyboard.createCursorKeys()
@@ -71,64 +72,66 @@ export default class extends Phaser.State {
   }
 
   update () {
-    const {aPotato} = this
-
+    const {player} = this
+    const {body, scale} = player
+    const {velocity} = body
     const {up, down, left, right} = this.cursors
     let isWalking = false
-    if (down.isDown) {
-      aPotato.y += speed
-      this.movingDown = 3
-      isWalking = true
-    }
+
     if (up.isDown) {
-      aPotato.y -= speed
-      this.movingUp = 3
+      velocity.y = -walkVelocity
+      isWalking = true
+    } else
+    if (down.isDown) {
+      velocity.y = walkVelocity
       isWalking = true
     }
     if (left.isDown) {
-      aPotato.x -= speed
-      this.movingLeft = 3
-      aPotato.scale.x = -playerScale
+      velocity.x = -walkVelocity
       isWalking = true
-    }
+      scale.x = -1
+    } else
     if (right.isDown) {
-      aPotato.x += speed
-      this.movingRight = 3
-      aPotato.scale.x = playerScale
+      velocity.x = walkVelocity
       isWalking = true
+      scale.x = 1
     }
     if (isWalking) {
-      this.aPotato.animations.play('cycle', 8)
+      this.player.animations.play('cycle', 8)
+    } else {
+      velocity.x = 0
+      velocity.y = 0
     }
 
     if (!isWalking) {
-      this.aPotato.frame = 0
-      this.aPotato.animations.stop()
-      if (this.movingRight > 0) {
-        this.movingRight -= 0.1
-        aPotato.x += 0.5 ^ this.movingRight
-      }
-      if (this.movingLeft > 0) {
-        this.movingLeft -= 0.1
-        aPotato.x -= 0.5 ^ this.movingLeft
-      }
-      if (this.movingUp > 0) {
-        this.movingUp -= 0.1
-        aPotato.y -= 0.5 ^ this.movingUp
-      }
-      if (this.movingDown > 0) {
-        this.movingDown -= 0.1
-        aPotato.y += 0.5 ^ this.movingDown
-      }
+      this.player.frame = 0
+      this.player.animations.stop()
+      // if (this.movingRight > 0) {
+      //   this.movingRight -= 0.1
+      //   player.x += 0.5 ^ this.movingRight
+      // }
+      // if (this.movingLeft > 0) {
+      //   this.movingLeft -= 0.1
+      //   player.x -= 0.5 ^ this.movingLeft
+      // }
+      // if (this.movingUp > 0) {
+      //   this.movingUp -= 0.1
+      //   player.y -= 0.5 ^ this.movingUp
+      // }
+      // if (this.movingDown > 0) {
+      //   this.movingDown -= 0.1
+      //   player.y += 0.5 ^ this.movingDown
+      // }
     }
-    this.game.physics.arcade.collide(this.aPotato, this.mushroom, (sprite1, sprite2) => {
+    this.game.physics.arcade.collide(this.player, this.mushroom, (sprite1, sprite2) => {
       // console.log(sprite1, sprite2)
     })
   }
 
   render () {
     if (__DEV__) {
-      this.game.debug.spriteInfo(this.mushroom, 32, 32)
+      this.game.debug.bodyInfo(this.player, 16, 24)
+      // this.game.debug.spriteInfo(this.mushroom, 32, 32)
     }
   }
 }
