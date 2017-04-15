@@ -96,33 +96,31 @@ export default class extends Phaser.State {
       isWalking = true
       scale.x = 1
     }
+    const slideFriction = 15
     if (isWalking) {
       this.player.animations.play('cycle', 8)
     } else {
-      velocity.x = 0
-      velocity.y = 0
-    }
-
-    if (!isWalking) {
+      const {x, y} = velocity
       this.player.frame = 0
       this.player.animations.stop()
-      // if (this.movingRight > 0) {
-      //   this.movingRight -= 0.1
-      //   player.x += 0.5 ^ this.movingRight
-      // }
-      // if (this.movingLeft > 0) {
-      //   this.movingLeft -= 0.1
-      //   player.x -= 0.5 ^ this.movingLeft
-      // }
-      // if (this.movingUp > 0) {
-      //   this.movingUp -= 0.1
-      //   player.y -= 0.5 ^ this.movingUp
-      // }
-      // if (this.movingDown > 0) {
-      //   this.movingDown -= 0.1
-      //   player.y += 0.5 ^ this.movingDown
-      // }
+      if (x > 0) {
+        velocity.x -= slideFriction
+        if (x < 0) velocity.x = 0
+      }
+      if (x < 0) {
+        velocity.x += slideFriction
+        if (x > 0) velocity.x = 0
+      }
+      if (y > 0) {
+        velocity.y -= slideFriction
+        if (y < 0) velocity.y = 0
+      }
+      if (y < 0) {
+        velocity.y += slideFriction
+        if (y > 0) velocity.y = 0
+      }
     }
+
     this.game.physics.arcade.collide(this.player, this.mushroom, (sprite1, sprite2) => {
       // console.log(sprite1, sprite2)
     })
