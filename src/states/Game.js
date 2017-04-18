@@ -76,12 +76,14 @@ export default class extends Phaser.State {
     const {body, scale} = player
     const {velocity} = body
     const {up, down, left, right} = this.cursors
+    const {x, y} = velocity
+    const slideFriction = 5
     let isWalking = false
 
     if (up.isDown) {
       velocity.y = -walkVelocity
       isWalking = true
-    } else
+    }
     if (down.isDown) {
       velocity.y = walkVelocity
       isWalking = true
@@ -90,27 +92,13 @@ export default class extends Phaser.State {
       velocity.x = -walkVelocity
       isWalking = true
       scale.x = -1
-    } else
+    }
     if (right.isDown) {
       velocity.x = walkVelocity
       isWalking = true
       scale.x = 1
     }
-    const slideFriction = 15
-    if (isWalking) {
-      this.player.animations.play('cycle', 8)
-    } else {
-      const {x, y} = velocity
-      this.player.frame = 0
-      this.player.animations.stop()
-      if (x > 0) {
-        velocity.x -= slideFriction
-        if (x < 0) velocity.x = 0
-      }
-      if (x < 0) {
-        velocity.x += slideFriction
-        if (x > 0) velocity.x = 0
-      }
+    if (down.isUp && up.isUp) {
       if (y > 0) {
         velocity.y -= slideFriction
         if (y < 0) velocity.y = 0
@@ -119,6 +107,38 @@ export default class extends Phaser.State {
         velocity.y += slideFriction
         if (y > 0) velocity.y = 0
       }
+    }
+    if (left.isUp && right.isUp) {
+      if (x > 0) {
+        velocity.x -= slideFriction
+        if (x < 0) velocity.x = 0
+      }
+      if (x < 0) {
+        velocity.x += slideFriction
+        if (x > 0) velocity.x = 0
+      }
+    }
+    if (isWalking) {
+      this.player.animations.play('cycle', 8)
+    } else {
+      this.player.frame = 0
+      this.player.animations.stop()
+      // if (x > 0) {
+      //   velocity.x -= slideFriction
+      //   if (x < 0) velocity.x = 0
+      // }
+      // if (x < 0) {
+      //   velocity.x += slideFriction
+      //   if (x > 0) velocity.x = 0
+      // }
+      // if (y > 0) {
+      //   velocity.y -= slideFriction
+      //   if (y < 0) velocity.y = 0
+      // }
+      // if (y < 0) {
+      //   velocity.y += slideFriction
+      //   if (y > 0) velocity.y = 0
+      // }
     }
 
     this.game.physics.arcade.collide(this.player, this.mushroom, (sprite1, sprite2) => {
