@@ -38,10 +38,6 @@ export default class extends Phaser.State {
       x: this.world.centerX,
       y: this.world.centerY,
       asset: 'a-potato'
-      // scale : {
-      //   x: playerScale,
-      //   y: playerScale
-      // }
     })
 
     this.game.add.existing(this.mushroom)
@@ -57,19 +53,9 @@ export default class extends Phaser.State {
     }
     this.player.body.onCollide = new Phaser.Signal()
     this.player.body.onCollide.add((sprite1, sprite2) => {
-      // this.player.animations.play('cycle', 10)
     })
 
     this.cursors = this.game.input.keyboard.createCursorKeys()
-    // face1.body.velocity.setTo(200, 200);
-    // face1.body.bounce.set(1);
-    //
-    // face2.body.velocity.setTo(-200, 200);
-    // face2.body.bounce.set(1);
-    //
-    // face1.body.collideWorldBounds = true;
-    // face2.body.collideWorldBounds = true;
-  }
 
   update () {
     const {player} = this
@@ -123,33 +109,15 @@ export default class extends Phaser.State {
     } else {
       this.player.frame = 0
       this.player.animations.stop()
-      // if (x > 0) {
-      //   velocity.x -= slideFriction
-      //   if (x < 0) velocity.x = 0
-      // }
-      // if (x < 0) {
-      //   velocity.x += slideFriction
-      //   if (x > 0) velocity.x = 0
-      // }
-      // if (y > 0) {
-      //   velocity.y -= slideFriction
-      //   if (y < 0) velocity.y = 0
-      // }
-      // if (y < 0) {
-      //   velocity.y += slideFriction
-      //   if (y > 0) velocity.y = 0
-      // }
     }
 
     this.game.physics.arcade.collide(this.player, this.mushroom, (sprite1, sprite2) => {
-      // console.log(sprite1, sprite2)
     })
   }
 
   render () {
     if (__DEV__) {
       this.game.debug.bodyInfo(this.player, 16, 24)
-      // this.game.debug.spriteInfo(this.mushroom, 32, 32)
     }
   }
 }
